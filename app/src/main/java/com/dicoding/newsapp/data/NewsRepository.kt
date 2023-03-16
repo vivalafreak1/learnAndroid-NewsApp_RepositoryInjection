@@ -60,6 +60,17 @@ class NewsRepository private constructor (
                 return result
         }
 
+        fun getBookmarkedNews(): LiveData<List<NewsEntity>> {
+                return newsDao.getBookmarkedNews()
+        }
+
+        fun setBookmarkedNews(news: NewsEntity, bookmarkState: Boolean) {
+                appExecutors.diskIO.execute{
+                        news.isBookmarked = bookmarkState
+                        newsDao.updateNews(news)
+                }
+        }
+
         companion object {
                 private var instance: NewsRepository? = null
                 fun getInstance(
